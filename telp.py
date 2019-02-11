@@ -175,7 +175,7 @@ def details(message):
 		det=get_det()
 		
 		bot.reply_to(message,det)
-		if(det != "First login to get details!")
+		if(det != "First login to get details!"):
 			purl="http://resources.vardhaman.org/images/cse/"
 			purl=purl+rno
 			purl=purl+".jpg"
