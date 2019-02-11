@@ -13,6 +13,7 @@ from bottle import (
     run, post, response, request as bottle_request
 )
 import os
+import marks as gpa
 #from selenium import webdriver
 #from webdriver_manager.chrome import ChromeDriverManager
 #from selenium.webdriver.common.keys import Keys
@@ -303,6 +304,40 @@ def get_outing(rno,pas,tid):
 	
 	#bot.send_photo(chat_id=tid,open(n, 'rb'))
 	#driver.quit()
+@bot.message_handler(commands=['cgpa','CGPA','C.G.P.A','c.g.p.a'])
+def Cgpa(message):
+	global finalurl
+	tid = message.from_user.id
+	if(finalurl != "http://studentscorner.vardhaman.org/"):
+		if tid in gid :
+			tindex=gid.index(tid)
+			rno=rid[tindex]
+			pas=pid[tindex]
+			data=gpa.cgpa(rno,pas)
+			bot.reply_to(message,data)
+			print(rno,pas)
+		else:
+			bot.reply_to(message,"First Login")
+	else:
+		bot.reply_to(message,"First Login")
+@bot.message_handler(func=lambda message:True if(len(message.text)==5) else False)
+def Sgpa(message):
+	global finalurl
+	tid = message.from_user.id
+	mtext=message.text
+	semid=mtext[0]
+	if(finalurl != "http://studentscorner.vardhaman.org/"):
+		if tid in gid :
+			tindex=gid.index(tid)
+			rno=rid[tindex]
+			pas=pid[tindex]
+			data=gpa.sgpa(rno,pas,semid)
+			bot.reply_to(message,data)
+			print(rno,pas)
+		else:
+			bot.reply_to(message,"First Login")
+	else:
+		bot.reply_to(message,"First Login")
 @server.route('/' + API_TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
