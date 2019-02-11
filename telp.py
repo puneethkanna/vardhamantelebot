@@ -49,7 +49,9 @@ def my_handler(bot, update):
 def send_welcome(message):
     bot.reply_to(message, """\
 Hi there, I am Vbot here to give you, your things!
-Enter your RollNo as '/rollno' and give one space and type password.
+Enter your RollNo and give one space and type password.
+Don't forget the space.
+"17881A0500 #ABCD"
 For help type '/help'\
 """)
 
@@ -110,8 +112,11 @@ def echo_message(message):
 			f='1'
 			print(f)
 			tid = message.from_user.id
-			sin_id(tid)
-			bot.reply_to(message,'Correct Password, what do you want?')
+			if tid in gid :
+				bot.reply_to(message,'First logout the other user and then try again')
+			else:
+				sin_id(tid)
+				bot.reply_to(message,'Correct Password, what do you want?')
 			
 		else:
 			bot.reply_to(message,'Incorrect password!, try again')
