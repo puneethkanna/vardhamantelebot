@@ -175,12 +175,13 @@ def details(message):
 		det=get_det()
 		
 		bot.reply_to(message,det)
-		purl="http://resources.vardhaman.org/images/cse/"
-		purl=purl+rno
-		purl=purl+".jpg"
-		print(purl)
+		if(det != "First login to get details!")
+			purl="http://resources.vardhaman.org/images/cse/"
+			purl=purl+rno
+			purl=purl+".jpg"
+			print(purl)
 		
-		bot.send_photo(chat_id=tid, photo=purl)
+			bot.send_photo(chat_id=tid, photo=purl)
 	else:
 		bot.reply_to(message,"First login to get details")
 
