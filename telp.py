@@ -1,4 +1,4 @@
-#This is VardhamanTeleBot its username in telegram is "vardhamanBot"nothhing
+#This is VardhamanTeleBot its username in telegram is "vardhamanBot"
 import re
 from robobrowser import RoboBrowser
 from bs4 import BeautifulSoup
@@ -19,6 +19,15 @@ import marks as gpa
 #from selenium.webdriver.common.keys import Keys
 API_TOKEN = '732755808:AAEbwnnqTko1Qbz0bTh4IzVO3_RUO3Nd7PE'
 bot = telebot.TeleBot(API_TOKEN)
+starts = threading.BoundedSemaphore()
+helps = threading.BoundedSemaphore()
+logins = threading.BoundedSemaphore()
+detailss= threading.BoundedSemaphore()
+atds = threading.BoundedSemaphore()
+logouts = threading.BoundedSemaphore()
+outings = threading.BoundedSemaphore()
+cgpas = threading.BoundedSemaphore()
+sgpas = threading.BoundedSemaphore()
 server = Flask(__name__)
 
 PORT = int(os.environ.get('PORT', '8443'))
@@ -43,10 +52,11 @@ def send_typing_action(func):
 
 @send_typing_action
 def my_handler(bot, update):
-    pass # Will send 'typing' action while processing the request.
+	pass # Will send 'typing' action while processing the request.
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
+	sends.acquire()
     bot.reply_to(message, """\
 Hi there, I am Vbot here to give you, your things!
 Enter your RollNo and give one space and type password.
@@ -54,16 +64,18 @@ Don't forget the space.
 "17881A0500 #ABCD"
 For help type '/help'\
 """)
-
+	sends.release()
 #For seeing the commands in my bot.
 @bot.message_handler(commands=['help'])
 def help(message):
+	helps.acquire()
 	bot.reply_to(message,"""
      '/details',
      '/attendance',
-     '/logout' 
+     '/cgpa' 
+	 and your sgpa as semnoandsgpa.'2sgpa','5gpa'
      for now.""")
-	
+	helps.release()
 # error handling if user isn't known yet
 # (obsolete once known users are saved to file, because all users
 #   had to use the /start command and are therefore known to the bot)
@@ -81,6 +93,7 @@ def help(message):
 @send_typing_action
 @bot.message_handler(func=lambda message:True if(len(message.text)==16 or len(message.text)>25) else False)
 def echo_message(message):
+	logins.acquire()
 	global m,f,rno,pas,tid
 	rno=''
 	#one()
@@ -120,7 +133,7 @@ def echo_message(message):
 			
 		else:
 			bot.reply_to(message,'Incorrect password!, try again')
-		
+		logins.release()
 #Saving rollno and passwords
 def sin_id(mid):
 	print("In sin")
@@ -140,6 +153,7 @@ def dic_gid(tid):
 	
 @bot.message_handler(commands=['attendance','atd'])
 def attendance(message):
+	atds.acquire()
 	global finalurl
 	tid = message.from_user.id
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
@@ -148,8 +162,10 @@ def attendance(message):
 		
 	else:
 		bot.reply_to(message,"First login to get details")
+	atds.release()
 @bot.message_handler(commands=['outing'])
 def outing(message):
+	outings.acquire()
 	global finalurl
 	print(finalurl)
 	tid = message.from_user.id
@@ -165,9 +181,11 @@ def outing(message):
 		
 	else:
 		bot.reply_to(message,"First login to get details")
+	outings.release()
 @send_typing_action
 @bot.message_handler(commands=['details','det'])
 def details(message):
+	detailss.acquire()
 	global finalurl
 	print("In details",finalurl)
 	tid = message.from_user.id
@@ -184,8 +202,8 @@ def details(message):
 			bot.send_photo(chat_id=tid, photo=purl)
 	else:
 		bot.reply_to(message,"First login to get details")
-
-@bot.message_handler(commands=['logout'])
+	detailss.release()
+'''@bot.message_handler(commands=['logout'])
 def logout(message):
 	global finalurl
 	if tid in gid :
@@ -201,7 +219,7 @@ def logout(message):
 		gid.remove(tid)
 		bot.reply_to(message,"loggedout successfully!")
 	else:
-		bot.reply_to(message,"I think you have not loggedIn.")
+		bot.reply_to(message,"I think you have not loggedIn.")'''
 def check_pas(rno,pas):
 	br = RoboBrowser(history=True, parser="html.parser")
 	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
@@ -312,6 +330,7 @@ def get_outing(rno,pas,tid):
 	#driver.quit()
 @bot.message_handler(commands=['cgpa','CGPA','C.G.P.A','c.g.p.a'])
 def Cgpa(message):
+	cgpas.acquire()
 	global finalurl
 	tid = message.from_user.id
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
@@ -326,8 +345,10 @@ def Cgpa(message):
 			bot.reply_to(message,"First Login")
 	else:
 		bot.reply_to(message,"First Login")
+	cgpas.release()
 @bot.message_handler(func=lambda message:True if(len(message.text)==5) else False)
 def Sgpa(message):
+	sgpas.acquire()
 	global finalurl
 	tid = message.from_user.id
 	mtext=message.text
@@ -344,6 +365,7 @@ def Sgpa(message):
 			bot.reply_to(message,"First Login")
 	else:
 		bot.reply_to(message,"First Login")
+	sgpas.release()
 @server.route('/' + API_TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
