@@ -183,9 +183,9 @@ def outing(message):
 		#driver.quit()
 		n=str(tid)+'.png'
 		try:
-				bot.send_photo(chat_id=tid, photo=purl)
-			except:
-				bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")
+			bot.send_photo(chat_id=tid, photo=purl)
+		except:
+			bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")
 		bot.send_photo(message, open(n, 'rb'))
 		
 	else:
