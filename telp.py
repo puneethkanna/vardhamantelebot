@@ -96,7 +96,14 @@ def echo_message(message):
 	rno=''
 	#one()
 	m=message.text
-	
+	tid = str(message.from_user.id)
+	if tid in gid :
+		tindex=gid.index(tid)
+		rno=rid[tindex]
+		pas=pid[tindex]
+		gid.remove(tid)
+		rid.remove(rno)
+		pid.remove(pas)
 	if(m[0]=='1'):
 		for i in range(0,10):
 			rno=rno+m[i]
@@ -122,7 +129,7 @@ def echo_message(message):
 		if(finalurl == "http://studentscorner.vardhaman.org/Students_Corner_Frame.php"):
 			f='1'
 			print(f)
-			tid = message.from_user.id
+			tid = str(message.from_user.id)
 			if tid in gid :
 				bot.reply_to(message,'First logout the other user and then try again')
 			else:
@@ -153,7 +160,7 @@ def dic_gid(tid):
 def attendance(message):
 	atds.acquire()
 	global finalurl
-	tid = message.from_user.id
+	tid = str(message.from_user.id)
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
 		atd=get_atd(rno,pas,tid)
 		bot.reply_to(message,atd)
@@ -166,7 +173,7 @@ def outing(message):
 	outings.acquire()
 	global finalurl
 	print(finalurl)
-	tid = message.from_user.id
+	tid =str( message.from_user.id)
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
 		
 		out=get_outing(rno,pas,tid)
@@ -175,6 +182,10 @@ def outing(message):
 		#driver.save_screenshot('permission.png')
 		#driver.quit()
 		n=str(tid)+'.png'
+		try:
+				bot.send_photo(chat_id=tid, photo=purl)
+			except:
+				bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")
 		bot.send_photo(message, open(n, 'rb'))
 		
 	else:
@@ -186,7 +197,7 @@ def details(message):
 	detailss.acquire()
 	global finalurl
 	print("In details",finalurl)
-	tid = message.from_user.id
+	tid = (message.from_user.id)
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
 		det=get_det()
 		
@@ -196,7 +207,10 @@ def details(message):
 			purl=purl+rno
 			purl=purl+".jpg"
 			print(purl)
-		
+			try:
+				bot.send_photo(chat_id=tid, photo=purl)
+			except:
+				bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")
 			bot.send_photo(chat_id=tid, photo=purl)
 	else:
 		bot.reply_to(message,"First login to get details")
@@ -330,7 +344,7 @@ def get_outing(rno,pas,tid):
 def Cgpa(message):
 	cgpas.acquire()
 	global finalurl
-	tid = message.from_user.id
+	tid = str(message.from_user.id)
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
 		if tid in gid :
 			tindex=gid.index(tid)
@@ -348,7 +362,7 @@ def Cgpa(message):
 def Sgpa(message):
 	sgpas.acquire()
 	global finalurl
-	tid = message.from_user.id
+	tid = str(message.from_user.id)
 	mtext=message.text
 	semid=mtext[0]
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
