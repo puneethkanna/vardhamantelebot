@@ -10,9 +10,6 @@ from functools import wraps
 from flask import Flask, request
 import requests  
 import threading
-from bottle import (  
-    run, post, response, request as bottle_request
-)
 import os
 import marks as gpa
 #from selenium import webdriver
@@ -58,7 +55,7 @@ def my_handler(bot, update):
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
 	sends.acquire()
-    bot.reply_to(message, """\
+	bot.reply_to(message, """\
 Hi there, I am Vbot here to give you, your things!
 Enter your RollNo and give one space and type password.
 Don't forget the space.
