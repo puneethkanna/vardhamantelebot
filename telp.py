@@ -182,10 +182,10 @@ def outing(message):
 		#driver.save_screenshot('permission.png')
 		#driver.quit()
 		n=str(tid)+'.png'
-		try:
+		'''try:
 			bot.send_photo(chat_id=tid, photo=purl)
 		except:
-			bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")
+			bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")'''
 		bot.send_photo(message, open(n, 'rb'))
 		
 	else:
@@ -211,7 +211,7 @@ def details(message):
 				bot.send_photo(chat_id=tid, photo=purl)
 			except:
 				bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")
-			bot.send_photo(chat_id=tid, photo=purl)
+			
 	else:
 		bot.reply_to(message,"First login to get details")
 	detailss.release()
