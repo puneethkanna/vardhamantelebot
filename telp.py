@@ -329,18 +329,16 @@ def Sgpa(message):
 	mtext=message.text
 	#semid=bot.reply_to(message,"Enter the semester number")
 	semid=mtext[0]
-	if(finalurl != "http://studentscorner.vardhaman.org/"):
-		if tid in gid :
-			tindex=gid.index(tid)
-			rno=rid[tindex]
-			pas=pid[tindex]
-			data=gpa.sgpa(rno,pas,semid)
-			bot.reply_to(message,data)
-			print(rno,pas)
-		else:
-			bot.reply_to(message,"First Login")
+	if tid in gid :
+		tindex=gid.index(tid)
+		rno=rid[tindex]
+		pas=pid[tindex]
+		data=gpa.sgpa(rno,pas,semid)
+		bot.reply_to(message,data)
+		print(rno,pas)
 	else:
 		bot.reply_to(message,"First Login")
+	
 @server.route('/' + API_TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
