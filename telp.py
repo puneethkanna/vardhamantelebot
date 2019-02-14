@@ -360,4 +360,4 @@ if __name__ == "__main__":
                       port=5000,
                       url_path=API_API_TOKEN)
 updater.bot.set_webhook("https://vteletest.herokuapp.com/" + API_TOKEN)
-updater.idle()
+updater.idle()'''
