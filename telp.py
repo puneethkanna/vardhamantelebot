@@ -2,7 +2,7 @@
 import re
 from robobrowser import RoboBrowser
 from bs4 import BeautifulSoup
-
+import imgkit
 import telebot
 import time
 from functools import wraps
@@ -17,15 +17,6 @@ import marks as gpa
 #from selenium.webdriver.common.keys import Keys
 API_TOKEN = '732755808:AAEbwnnqTko1Qbz0bTh4IzVO3_RUO3Nd7PE'
 bot = telebot.TeleBot(API_TOKEN)
-starts = threading.BoundedSemaphore()
-helps = threading.BoundedSemaphore()
-logins = threading.BoundedSemaphore()
-detailss= threading.BoundedSemaphore()
-atds = threading.BoundedSemaphore()
-logouts = threading.BoundedSemaphore()
-outings = threading.BoundedSemaphore()
-cgpas = threading.BoundedSemaphore()
-sgpas = threading.BoundedSemaphore()
 server = Flask(__name__)
 
 PORT = int(os.environ.get('PORT', '8443'))
@@ -50,11 +41,10 @@ def send_typing_action(func):
 
 @send_typing_action
 def my_handler(bot, update):
-	pass # Will send 'typing' action while processing the request.
+    pass # Will send 'typing' action while processing the request.
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-	sends.acquire()
 	bot.reply_to(message, """\
 Hi there, I am Vbot here to give you, your things!
 Enter your RollNo and give one space and type password.
@@ -62,18 +52,15 @@ Don't forget the space.
 "17881A0500 #ABCD"
 For help type '/help'\
 """)
-	sends.release()
+
 #For seeing the commands in my bot.
 @bot.message_handler(commands=['help'])
 def help(message):
-	helps.acquire()
 	bot.reply_to(message,"""
-     '/details',
-     '/attendance',
-     '/cgpa' 
-	 and your sgpa as semnoandsgpa.'2sgpa','5gpa'
+      '/details',
+      '/attendance',
+      '/logout' 
      for now.""")
-	helps.release()
 # error handling if user isn't known yet
 # (obsolete once known users are saved to file, because all users
 #   had to use the /start command and are therefore known to the bot)
@@ -91,12 +78,11 @@ def help(message):
 @send_typing_action
 @bot.message_handler(func=lambda message:True if(len(message.text)==16 or len(message.text)>25) else False)
 def echo_message(message):
-	logins.acquire()
-	global m,f,rno,pas,tid
 	rno=''
 	#one()
 	m=message.text
 	tid = str(message.from_user.id)
+	print(tid)
 	if tid in gid :
 		tindex=gid.index(tid)
 		rno=rid[tindex]
@@ -104,6 +90,7 @@ def echo_message(message):
 		gid.remove(tid)
 		rid.remove(rno)
 		pid.remove(pas)
+		#bot.reply_to(message,'First logout the other user and then try again')
 	if(m[0]=='1'):
 		for i in range(0,10):
 			rno=rno+m[i]
@@ -120,34 +107,30 @@ def echo_message(message):
 		form["rollno"] = rno
 		form["wak"] = pas
 		br.submit_form(form)
-		global finalurl
 		finalurl = "http://studentscorner.vardhaman.org/"
 		finalurl=check_pas(rno,pas)
-		#finalurl=suburl.geturl()
 		print(finalurl)
 		time.sleep(1)
 		if(finalurl == "http://studentscorner.vardhaman.org/Students_Corner_Frame.php"):
 			f='1'
-			print(f)
-			tid = str(message.from_user.id)
-			if tid in gid :
-				bot.reply_to(message,'First logout the other user and then try again')
-			else:
-				sin_id(tid)
-				bot.reply_to(message,'Correct Password, what do you want?')
+			#print(f)
+			#tid = str(message.from_user.id)
+			
+			sin_id(tid,rno,pas)
+			bot.reply_to(message,'Correct Password, what do you want?')
 			
 		else:
 			bot.reply_to(message,'Incorrect password!, try again')
-		logins.release()
 #Saving rollno and passwords
-def sin_id(mid):
+def sin_id(tid,rno,pas):
+	
 	print("In sin")
 	if tid not in gid :
 		rid.append(rno)
 		pid.append(pas)
 		print(rno,pas)
 		print("sin success")
-		dic_gid(tid)
+		dic_gid(tid)	
 #Saving tokenId of user
 def dic_gid(tid):
 	print("In dic_gid")
@@ -155,25 +138,20 @@ def dic_gid(tid):
 	gid.append(tid)
 	if(tid in gid):
 		print("dic_gid success")
-	
 @bot.message_handler(commands=['attendance','atd'])
 def attendance(message):
-	atds.acquire()
-	global finalurl
 	tid = str(message.from_user.id)
-	if(finalurl != "http://studentscorner.vardhaman.org/"):
-		atd=get_atd(rno,pas,tid)
+	if(tid in gid):
+		atd=get_atd(tid)
 		bot.reply_to(message,atd)
 		
 	else:
 		bot.reply_to(message,"First login to get details")
-	atds.release()
 @bot.message_handler(commands=['outing'])
 def outing(message):
-	outings.acquire()
 	global finalurl
 	print(finalurl)
-	tid =str( message.from_user.id)
+	tid = str(message.from_user.id)
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
 		
 		out=get_outing(rno,pas,tid)
@@ -181,28 +159,24 @@ def outing(message):
 		#driver.get('http://studentscorner.vardhaman.org/students_permission_form.php')
 		#driver.save_screenshot('permission.png')
 		#driver.quit()
-		n=str(tid)+'.png'
-		'''try:
-			bot.send_photo(chat_id=tid, photo=purl)
-		except:
-			bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")'''
-		bot.send_photo(message, open(n, 'rb'))
+		#n=str(tid)+'.png'
+		#bot.send_photo(message, open(n, 'rb'))
 		
 	else:
 		bot.reply_to(message,"First login to get details")
-	outings.release()
 @send_typing_action
 @bot.message_handler(commands=['details','det'])
 def details(message):
-	detailss.acquire()
-	global finalurl
 	print("In details",finalurl)
-	tid = (message.from_user.id)
-	if(finalurl != "http://studentscorner.vardhaman.org/"):
-		det=get_det()
+	tid = str(message.from_user.id)
+	if(tid in gid):
+		det=get_det(tid)
 		
 		bot.reply_to(message,det)
 		if(det != "First login to get details!"):
+			if tid in gid :
+				tindex=gid.index(tid)
+				rno=rid[tindex]
 			purl="http://resources.vardhaman.org/images/cse/"
 			purl=purl+rno
 			purl=purl+".jpg"
@@ -211,27 +185,31 @@ def details(message):
 				bot.send_photo(chat_id=tid, photo=purl)
 			except:
 				bot.reply_to(message,"We cannot send the photo to your phone.\nIf you got the photo previously in the same phone, please send a mail to \n vardhamanassistant@gmail.com stating the issue.")
-			
 	else:
 		bot.reply_to(message,"First login to get details")
-	detailss.release()
-'''@bot.message_handler(commands=['logout'])
+@bot.message_handler(commands=['logout'])
 def logout(message):
-	global finalurl
+	tid = str(message.from_user.id)
 	if tid in gid :
 		tindex=gid.index(tid)
 		rno=rid[tindex]
 		pas=pid[tindex]
 		print(rno,pas)
-	else:
-		return("First Login")
-	if(finalurl != "http://studentscorner.vardhaman.org/"):
+	#try:
+	if(tid in gid):
+		tid = str(message.from_user.id)
+		tindex=gid.index(tid)
+		rno=str(rid[tindex])
+		pas=str(pid[tindex])
 		br.open("http://studentscorner.vardhaman.org/logout.php")
 		finalurl = "http://studentscorner.vardhaman.org/"
 		gid.remove(tid)
-		bot.reply_to(message,"loggedout successfully!")
+		rid.remove(rno)
+		pid.remove(pas)
+		bot.reply_to(message,	"loggedout successfully!")
 	else:
-		bot.reply_to(message,"I think you have not loggedIn.")'''
+		bot.reply_to(message,"I think you have not loggedIn.")
+
 def check_pas(rno,pas):
 	br = RoboBrowser(history=True, parser="html.parser")
 	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
@@ -249,14 +227,12 @@ def check_pas(rno,pas):
 		return(finalurl)
 	else:
 		return False
-def get_atd(rno,pas,tid):
-	if tid in gid :
-		tindex=gid.index(tid)
-		rno=rid[tindex]
-		pas=pid[tindex]
-		print(rno,pas)
-	else:
-		return("First Login")
+def get_atd(tid):
+
+	tindex=gid.index(tid)
+	rno=rid[tindex]
+	pas=pid[tindex]
+	print(rno,pas)
 #Below code can also be written in if block. This is also correct as else returns below code will not execute.
 	br = RoboBrowser(history=True, parser="html.parser")
 	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
@@ -273,19 +249,15 @@ def get_atd(rno,pas,tid):
 	try:
 		for i in range(46,56):
 			if(str(th[i].text.strip())=="Attendance Percentage"):
-				if(finalurl != "http://studentscorner.vardhaman.org/"):
-					return str(th[i].text.strip())+":"+str(th[i+1].text.strip())#attend
+				#if(finalurl != "http://studentscorner.vardhaman.org/"):
+				return str(th[i].text.strip())+":"+str(th[i+1].text.strip())#attend
 	except IndexError:
-		return("Attendance is Freesed")
-def get_det():
-	global finalurl
-	if tid in gid :
-		tindex=gid.index(tid)
-		rno=rid[tindex]
-		pas=pid[tindex]
-		print(rno,pas)
-	else:
-		return("First Login")
+		return("Attendance is Freesed.\nIf attendance is not freesed you can see it in the website send the mail to \n vardhamanassistant@gmail.com\nstating the issue.")
+def get_det(tid):
+	tindex=gid.index(tid)
+	rno=rid[tindex]
+	pas=pid[tindex]
+	print(rno,pas)
 	br = RoboBrowser(history=True, parser="html.parser")
 	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
 	br.open('http://studentscorner.vardhaman.org')
@@ -302,68 +274,60 @@ def get_det():
 	td=br.select("td")#8
 	print("In details "+rno)
 	#print(z.geturl())
-	if finalurl != "http://studentscorner.vardhaman.org/":
-		try:
-			return(str(th[3].text.strip())+":"+str(td[8].text.strip())+"\n"+str(th[10].text.strip())+":"+str(td[17].text.strip())+"\n"+str(th[29].text.strip())+":"+(str(td[33].text.strip()))+"\n"+str(th[31].text.strip())+":"+str(td[35].text.strip()))#details
-		except IndexError:
-			return("Something is wrong")
-	else:
-		return("First login to get details!")
+	#if finalurl != "http://studentscorner.vardhaman.org/":
+	try:
+		return(str(th[3].text.strip())+":"+str(td[8].text.strip())+"\n"+str(th[10].text.strip())+":"+str(td[17].text.strip())+"\n"+str(th[29].text.strip())+":"+(str(td[33].text.strip()))+"\n"+str(th[31].text.strip())+":"+str(td[35].text.strip()))#details
+	except IndexError:
+		return("Something is wrong")
+	#else:
+	#	return("First login to get details!")
 	#return 0
 	
 def get_outing(rno,pas,tid):
-	br.set_handle_robots(False)
-	br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-	#bot.reply_to(message,"Enter outdate and time")
-	#bot.reply_to(message,"Enter in date and time")
-	#bot.reply_to(message,"Enter Reasson")
-	#outtime=raw_input("Enter your out time")
-	#intime=raw_input("Enter your in time")
-	#reason=raw_input("Enter your outing reason")
+	br = RoboBrowser(history=True, parser="html.parser")
+	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
+	#out_time=bot.reply_to(message,"Enter outdate and time")
+	#in_time=bot.reply_to(message,"Enter in date and time")
+	#reason=bot.reply_to(message,"Enter Reasson")
 	br.open("http://studentscorner.vardhaman.org/students_permission_form.php")
-	#br.select_form(nr=0)
+	#form = br.get_form(action="insert_permission.php")
 	#br.form['out_time']=outtime
 	#br.form['in_time']=intime
 	#br.form['reason']=reason
-	#br.submit()
+	#br.submit_form(form)
 	#DRIVER = 'chromedriver'
 	#driver = webdriver.Chrome(DRIVER)
 	
 	#driver.get('http://studentscorner.vardhaman.org/students_permission_form.php')
-	
+	#img = imgkit.from_url('http://google.com', False)
+	imgkit.from_url('http://google.com', 'out.jpg')
 	#img = Image.open(n)
 	#img.show()
-	n=str(tid)+'.png'
+	#n=str(tid)+'.png'
 	#driver.save_screenshot(n)
 	#bot.reply_to(message,z)
-	link="/home/puneeth/Desktop/work/tele/"+str(tid)+".png"
-	
-	#bot.send_photo(chat_id=tid,open(n, 'rb'))
+	#link="/home/puneeth/Desktop/work/tele/"+str(tid)+".png"
+	#bot.reply_to(chat_id=tid,img)
+	bot.send_photo(message,open(out, 'rb'))
 	#driver.quit()
 @bot.message_handler(commands=['cgpa','CGPA','C.G.P.A','c.g.p.a'])
 def Cgpa(message):
-	cgpas.acquire()
-	global finalurl
 	tid = str(message.from_user.id)
-	if(finalurl != "http://studentscorner.vardhaman.org/"):
-		if tid in gid :
-			tindex=gid.index(tid)
-			rno=rid[tindex]
-			pas=pid[tindex]
-			data=gpa.cgpa(rno,pas)
-			bot.reply_to(message,data)
-			print(rno,pas)
-		else:
-			bot.reply_to(message,"First Login")
+	if tid in gid :
+		tindex=gid.index(tid)
+		rno=rid[tindex]
+		pas=pid[tindex]
+		data=gpa.cgpa(rno,pas)
+		bot.reply_to(message,data)
+		print(rno,pas)
 	else:
 		bot.reply_to(message,"First Login")
-	cgpas.release()
+
 @bot.message_handler(func=lambda message:True if(len(message.text)==5) else False)
 def Sgpa(message):
-	sgpas.acquire()
-	global finalurl
 	tid = str(message.from_user.id)
 	mtext=message.text
+	#semid=bot.reply_to(message,"Enter the semester number")
 	semid=mtext[0]
 	if(finalurl != "http://studentscorner.vardhaman.org/"):
 		if tid in gid :
@@ -377,7 +341,6 @@ def Sgpa(message):
 			bot.reply_to(message,"First Login")
 	else:
 		bot.reply_to(message,"First Login")
-	sgpas.release()
 @server.route('/' + API_TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
@@ -398,4 +361,3 @@ if __name__ == "__main__":
                       url_path=API_API_TOKEN)
 updater.bot.set_webhook("https://vteletest.herokuapp.com/" + API_TOKEN)
 updater.idle()
-#bot.polling()'''
