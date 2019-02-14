@@ -28,10 +28,12 @@ def cgpa(rno,pas):
 	th=br.select("th")#3
 	td=br.select("td")#8
 	c=str(br.select)
+	t="Cumulative Grade Point Average"
+	i=c.index(t)
 	try:
-		return(str(th[1].text.strip())+":"+str(td[7].text.strip())+"\n"+str(th[24].text.strip()))
+		return(str(th[1].text.strip())+":"+str(td[7].text.strip())+"\n"+"Cumulative Grade Point Average:"+c[i+33]+c[i+34]+c[i+35]+c[i+36])
 	except IndexError:
-				return("Something went wrong send the report to vardhamanassistant@gmail.com stating the issue. with your rollno")
+		return("Something went wrong send the report to vardhamanassistant@gmail.com stating the issue, with your rollno")
 def sgpa(rno,pas,semid):
 	br = RoboBrowser(history=True, parser="html.parser")
 	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
