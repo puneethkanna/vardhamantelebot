@@ -328,7 +328,7 @@ def Sgpa(message):
 	tid = str(message.from_user.id)
 	mtext=message.text
 	#semid=bot.reply_to(message,"Enter the semester number")
-	semid=mtext[0]
+	semid=mtext[-1] # last character of string
 	if tid in gid :
 		tindex=gid.index(tid)
 		rno=rid[tindex]
