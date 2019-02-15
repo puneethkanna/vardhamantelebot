@@ -59,7 +59,8 @@ def help(message):
 	bot.reply_to(message,"""
       '/details',
       '/attendance',
-      '/logout' 
+      '/logout',
+      '/sgpa'
      for now.""")
 # error handling if user isn't known yet
 # (obsolete once known users are saved to file, because all users
