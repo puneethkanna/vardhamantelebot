@@ -324,12 +324,15 @@ def Cgpa(message):
 	else:
 		bot.reply_to(message,"First Login")
 
-@bot.message_handler(func=lambda message:True if(len(message.text)==5) else False)
+@bot.message_handler(func=lambda message:True if(len(message.text)==5 or len(message.text)==6)) else False)
 def Sgpa(message):
 	tid = str(message.from_user.id)
 	mtext=message.text
 	#semid=bot.reply_to(message,"Enter the semester number")
-	semid=mtext[-1] # last character of string
+	if(len(message.text)==5):
+		semid=mtext[0]
+	len(message.text)==6):
+		semid=mtext[-1] # last character of string
 	if tid in gid :
 		tindex=gid.index(tid)
 		rno=rid[tindex]
