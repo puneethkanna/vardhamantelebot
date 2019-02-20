@@ -334,7 +334,7 @@ def Cgpa(message):
 	else:
 		bot.reply_to(message,"First Login")
 
-@bot.message_handler(func=lambda message:True if(len(message.text)==5 or len(message.text)==6)) else False)
+@bot.message_handler(func=lambda message:True if(len(message.text)==5 or len(message.text)==6) else False)
 def Sgpa(message):
 	tid = str(message.from_user.id)
 	mtext=message.text
