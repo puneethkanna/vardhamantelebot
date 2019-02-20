@@ -97,6 +97,7 @@ def echo_message(message):
 		for i in range(0,10):
 			rno=rno+m[i]
 			#print(rno)
+	rno=rno.upper()
 	pas=''
 	bot.reply_to(message,"wait")
 	if(m[11]=='#' or m[11] == 'h'):
@@ -144,8 +145,8 @@ def dic_gid(tid):
 def attendance(message):
 	tid = str(message.from_user.id)
 	if(tid in gid):
-		atd=get_atd(tid)
-		bot.reply_to(message,atd)
+		get_atd(tid)
+		#bot.reply_to(message,atd)
 		
 	else:
 		bot.reply_to(message,"First login to get details")
@@ -252,9 +253,17 @@ def get_atd(tid):
 		for i in range(46,56):
 			if(str(th[i].text.strip())=="Attendance Percentage"):
 				#if(finalurl != "http://studentscorner.vardhaman.org/"):
-				return str(th[i].text.strip())+":"+str(th[i+1].text.strip())#attend
+				 bot.send_message(tid,str(th[i].text.strip())+":"+str(th[i+1].text.strip()))#attend
+				 
 	except IndexError:
-		return("Attendance is Freesed.\nIf attendance is not freesed you can see it in the website send the mail to \n vardhamanassistant@gmail.com\nstating the issue.")
+		bot.send_message(tid,"Attendance is Freesed.\nIf attendance is not freesed you can see it in the website send the mail to \n vardhamanassistant@gmail.com\nstating the issue.")
+	try:
+		for i in range(9,37,4):
+			bot.send_message(tid,str(td[i].text.strip())+"   "+str(td[i+1].text.strip())+"   "+str(td[i+2].text.strip())+"   "+str(td[i+3].text.strip()))#attend)
+		#break
+	except IndexError:
+		pass
+		
 def get_det(tid):
 	tindex=gid.index(tid)
 	rno=rid[tindex]
