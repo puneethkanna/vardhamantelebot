@@ -253,13 +253,13 @@ def get_atd(tid):
 		for i in range(46,56):
 			if(str(th[i].text.strip())=="Attendance Percentage"):
 				#if(finalurl != "http://studentscorner.vardhaman.org/"):
-				 bot.send_message(tid,str(th[i].text.strip())+":"+str(th[i+1].text.strip()))#attend
+				 bot.send_message(tid,str(th[i].text.strip())+": **"+str(th[i+1].text.strip())+"**")#attend
 				 
 	except IndexError:
 		bot.send_message(tid,"Attendance is Freesed.\nIf attendance is not freesed you can see it in the website send the mail to \n vardhamanassistant@gmail.com\nstating the issue.")
 	try:
 		for i in range(9,37,4):
-			bot.send_message(tid,str(td[i].text.strip())+"   "+str(td[i+1].text.strip())+"   "+str(td[i+2].text.strip())+"   "+str(td[i+3].text.strip()))#attend)
+			bot.send_message(tid,str(td[i].text.strip())+"   "+str(td[i+1].text.strip())+"   "+str(td[i+2].text.strip())+"  -  **"+str(td[i+3].text.strip())+"**")#attend)
 		#break
 	except IndexError:
 		pass
