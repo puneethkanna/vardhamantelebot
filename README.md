@@ -1,6 +1,6 @@
 # vardhamantelebot
 Vardhaman Telegram Bot
-### username - @vardhamantelebot
+### username - @vardhamanbot
 
 ##### To install requirements for running the bot
 pip3 install -r requirements.txt or sh add.sh
