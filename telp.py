@@ -20,7 +20,7 @@ bot = telebot.TeleBot(API_TOKEN)
 server = Flask(__name__)
 
 PORT = int(os.environ.get('PORT', '8443'))
-#updater = Updater(API_API_TOKEN)
+#upd	ater = Updater(API_API_TOKEN)
 global br,gid,rid,pid,finalurl#,checkrno
 finalurl = "http://studentscorner.vardhaman.org/"
 gid=[]
@@ -253,17 +253,24 @@ def get_atd(tid):
 		for i in range(46,56):
 			if(str(th[i].text.strip())=="Attendance Percentage"):
 				#if(finalurl != "http://studentscorner.vardhaman.org/"):
-				 bot.send_message(tid,str(th[i].text.strip())+": **"+str(th[i+1].text.strip())+"**")#attend
+				bot.send_message(tid,str(th[i].text.strip())+" : *"+str(th[i+1].text.strip())+"*",parse_mode= 'Markdown')#attend
 				 
 	except IndexError:
-		bot.send_message(tid,"Attendance is Freesed.\nIf attendance is not freesed you can see it in the website send the mail to \n vardhamanassistant@gmail.com\nstating the issue.")
+		bot.send_message(tid,"*Attendance is Freesed*.\nIf attendance is not freesed you can see it in the website send the mail to \n *vardhamanassistant@gmail.com*\nstating the issue.",parse_mode= 'Markdown')
 	try:
 		for i in range(9,37,4):
-			bot.send_message(tid,str(td[i].text.strip())+"   "+str(td[i+1].text.strip())+"   "+str(td[i+2].text.strip()).lower()+"  -  **"+str(td[i+3].text.strip())+"**")#attend)
+			t=td[i+3].text.strip()
+			p=td[i+1].text.strip()
+			d=td[i+2].text.strip()
+			t=t.upper()
+			d=d[0].upper()+d[1:].lower()
+			if(t=="PRESENT"):
+				bot.send_message(tid,str(td[i].text.strip())+"   "+str(td[i+1].text.strip())	+"   "+d+"  -  <b>"+t+"</b>",parse_mode= 'Html')#attend)
+			else:
+				bot.send_message(tid,str(td[i].text.strip())+"   "+p+"   "+d+"  -  ~<i>"+t+"</i>~",parse_mode= 'Html')#attend)
 		#break
 	except IndexError:
-		pass
-		
+		pass		
 def get_det(tid):
 	tindex=gid.index(tid)
 	rno=rid[tindex]
