@@ -369,7 +369,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://vardhamantelebot.herokuapp.com/' + API_TOKEN)
+    bot.set_webhook(url=' https://vardhamantelebottest.herokuapp.com/' + API_TOKEN)
     return "!", 200
 
 
