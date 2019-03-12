@@ -15,7 +15,7 @@ import marks as gpa
 #from selenium import webdriver
 #from webdriver_manager.chrome import ChromeDriverManager
 #from selenium.webdriver.common.keys import Keys
-API_TOKEN = '714169450:AAGPQyLSTXfY6umwMmJp9nrJWO1c6fCf7e4'
+API_TOKEN = '714169450:AAH1zbXmCKBFLY46xznM9v6iJc8E4SfQb8A'
 bot = telebot.TeleBot(API_TOKEN)
 server = Flask(__name__)
 
