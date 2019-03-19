@@ -300,7 +300,133 @@ def get_det(tid):
 	#else:
 	#	return("First login to get details!")
 	#return 0
+@bot.message_handler(commands=['outing'])
+def outing(message):
+	tid = str(message.from_user.id)
+	if tid in gid:
+		tindex=gid.index(tid)
+		rno=rid[tindex]
+		pas=pid[tindex]
+		#out_date=out.out_datetime(tid)
+		#in_date=out.in_datetime(tid)
+		#reason=out.reason(tid)
+		#status=
+		c=papply.check_hostel(rno,pas)
+		if(c=="True"):
+			out_datetime(rno,pas,tid)
+		else:
+			bot.reply_to(message,"You are not a hosteler! :).\nIf it is wrong please send a mail to vardhamanassistant@gmail.com stating the issue.")
+		#bot.reply_to(message,status)
+		#driver = webdriver.Firefox()
+		#driver.get('http://studentscorner.vardhaman.org/students_permission_form.php')
+		#driver.save_screenshot('permission.png')
+		#driver.quit()
+		#n=str(tid)+'.png'
+		#bot.send_photo(message, open(n, 'rb'))
+		
+	else:
+		bot.reply_to(message,"First login to apply permission")
+def out_datetime(rno,pas,tid):
+	chat_id = tid
+	ppr.append(rno)
+	ppr.append(pas)
+	#name="user"
+	#user = User(name)
+	#user_dict[chat_id] = user
+	#user.rno=rno
+	#user.pas=pas
+	#user.tid=tid
+	try:
+		msg=bot.send_message(chat_id,"Enter outdate and time")
+		bot.register_next_step_handler(msg, in_datetime)
+	except Exception as e:
+		Bot.send_message(chat_id,'oooops\nSomething went wrong.\nsend a mail to vardhamanassistant@gmail.com stating the issue.\n')
+
+
+def in_datetime(message):
+	chat_id = message.chat.id
+	#user = user_dict[chat_id]
+	out_time=message.text
+	pper.append(out_time)
 	
+	#user.out_time = out_time
+	print(out_time)
+	try:
+		msg=bot.reply_to(message,"Enter indate and time")
+        #if not age.isdigit():
+        #    msg = bot.reply_to(message, 'Age should be a number. How old are you?')
+        #    bot.register_next_step_handler(msg, process_age_step)
+        #    return
+        
+        #markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        #markup.add('Yes', 'No')
+        #msg = bot.reply_to(message, 'Do you want to apply', reply_markup=markup)
+		bot.register_next_step_handler(msg, reason)
+	except Exception as e:
+		bot.send_message(message,'oops\nSomething went wrong.\nsend a mail to vardhamanassistant@gmail.com stating the issue.\n')
+
+
+
+def reason(message):
+	chat_id = message.chat.id
+	#user = user_dict[chat_id]
+	in_time = message.text
+	pper.append(in_time)
+	#user = user_dict[chat_id]
+	#user.in_time = in_time
+	try:
+		msg=bot.reply_to(message,"Enter reason :)")
+        	
+		bot.register_next_step_handler(msg, yes_no)
+        	#bot.send_message(chat_id, 'Nice to meet you ' + user.name + '\n Age:' + str(user.age) + '\n Sex:' + user.sex)
+	except Exception as e:
+		bot.send_message(message,'oooops\nSomething went wrong.\nsend a mail to vardhamanassistant@gmail.com stating the issue.\n')
+
+def yes_no(message):
+	chat_id = message.chat.id
+	reas = message.text
+	#user = user_dict[chat_id]
+	#user.reas = reas
+	pper.append(reas)
+	markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+	markup.add('Yes', 'NO')
+	msg = bot.reply_to(message, 'Do you want to apply', reply_markup=markup)
+	bot.register_next_step_handler(msg, applying)
+            
+def applying(message):
+	chat_id = message.chat.id
+	ask = message.text
+        #user = user_dict[chat_id]
+	if(ask == u'Yes'):
+		#tindex=gid.index(tid)
+		#rno=rid[tindex]
+		#pas=pid[tindex]
+		tt=papply.applyf(ppr[0],ppr[1],pper[0],pper[1],pper[2])
+		'''br = RoboBrowser(history=True, parser="html.parser")
+		br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
+		br.open('http://studentscorner.vardhaman.org')
+		form = br.get_form(action="")
+		form["rollno"] = ppr[0]
+		form["wak"] = ppr[1]
+		br.submit_form(form)
+		checkper=str(br.select)
+		#if(checkper)
+		br.open("http://studentscorner.vardhaman.org/students_permission_form.php")
+		#pform =br.get_form(name="cl_form")
+		#pform=br.get_form(action="insert_permission.php")
+		pform = br.get_forms()[0]
+		print(pper[0:])
+		pform['out_time'].value=pper[0]
+		pform['in_time'].value=pper[1]
+		pform['reason'].value=pper[2]
+		br.submit_form(pform,submit='cl')
+		#bt=br.parsed()
+		checkper=str(br.select)
+		print(checkper)'''
+		
+		bot.reply_to(message,tt)
+	elif(ask == u'No'):
+		bot.reply_to(message,"You have cancelled to submit the form.")	
 def get_outing(rno,pas,tid):
 	br = RoboBrowser(history=True, parser="html.parser")
 	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
