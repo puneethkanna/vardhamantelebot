@@ -150,7 +150,7 @@ def attendance(message):
 		
 	else:
 		bot.reply_to(message,"First login to get details")
-@bot.message_handler(commands=['outing'])
+'''@bot.message_handler(commands=['outing'])
 def outing(message):
 	global finalurl
 	print(finalurl)
@@ -167,6 +167,7 @@ def outing(message):
 		
 	else:
 		bot.reply_to(message,"First login to get details")
+'''
 @send_typing_action
 @bot.message_handler(commands=['details','det'])
 def details(message):
