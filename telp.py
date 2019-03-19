@@ -22,11 +22,13 @@ server = Flask(__name__)
 
 PORT = int(os.environ.get('PORT', '8443'))
 #upd	ater = Updater(API_API_TOKEN)
-global br,gid,rid,pid,finalurl#,checkrno
+global br,gid,rid,pid,finalurl,ppr,pper#,checkrno
 finalurl = "http://studentscorner.vardhaman.org/"
 gid=[]
 rid=[]
 pid=[]
+ppr=[]
+pper=[]
 br = RoboBrowser(history=True, parser="html.parser")
 
 def send_typing_action(func):
