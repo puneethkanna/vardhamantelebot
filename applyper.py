@@ -42,8 +42,15 @@ def applyf(rno,pas,out,indat,rea):
 	br.submit_form(form)
 	tt=str(br.select)
 	print(tt)
+	td=br.select("td")
 	if("Permission Form Submitted Successfully" in tt):
-		return("Permission Form Submitted Successfully")
+		if(str(td[8].text.strip())=="Student Name"):
+			return(str(td[9].text.strip()).title()+"'s Permission Form Submitted Successfully")
+		elif(str(td[29].text.strip())=="Student Name"):
+			return(str(td[30].text.strip()).title()+"'s Permission Form Submitted Successfully")
+
+		else:
+			return("Permission Form Submitted Successfully.\n\nYour name has not found in the permission,please send a mail to \nvardhamanassistant@gmail.com\nstating the issue.")
 	else:
 		return("Something went wrong.Apply the form manually and mail to vardhamanassistant@gmail.com stating the issue.")
 
