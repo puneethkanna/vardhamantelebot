@@ -42,6 +42,7 @@ def applyf(rno,pas,out,indat,rea):
 	br.submit_form(form)
 	tt=str(br.select)
 	print(tt)
+	br.open("http://studentscorner.vardhaman.org/students_permission_form.php")
 	td=br.select("td")
 	if("Permission Form Submitted Successfully" in tt):
 		if(str(td[8].text.strip())=="Student Name"):
