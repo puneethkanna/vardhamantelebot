@@ -8,6 +8,8 @@ import time
 from functools import wraps
 #from telebot import types
 from flask import Flask, request
+import telebot
+from telebot import types
 import requests  
 import threading
 import os
