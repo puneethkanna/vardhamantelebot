@@ -395,7 +395,7 @@ def yes_no(message):
 	#user.reas = reas
 	pper.append(reas)
 	markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-	markup.add('Yes', 'NO')
+	markup.add('Yes', 'No')
 	msg = bot.reply_to(message, 'Do you want to apply', reply_markup=markup)
 	bot.register_next_step_handler(msg, applying)
             
