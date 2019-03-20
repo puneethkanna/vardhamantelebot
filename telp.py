@@ -429,7 +429,8 @@ def applying(message):
 		#bt=br.parsed()
 		checkper=str(br.select)
 		print(checkper)'''
-		
+		del ppr[:]
+		del pper[:]
 		bot.reply_to(message,tt)
 	elif(ask == u'No'):
 		bot.reply_to(message,"You have cancelled to submit the form.")	
