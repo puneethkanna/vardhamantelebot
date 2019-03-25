@@ -262,7 +262,7 @@ def get_atd(tid):
 				bot.send_message(tid,str(th[i].text.strip())+" : *"+str(th[i+1].text.strip())+"*",parse_mode= 'Markdown')#attend
 				 
 	except IndexError:
-		bot.send_message(tid,"*Attendance is Freesed*.\nIf attendance is not freesed you can see it in the website send the mail to \n *vardhamanassistant@gmail.com*\nstating the issue.",parse_mode= 'Markdown')
+		bot.send_message(tid,"*Attendance is Freezed*.\nIf attendance is not freezed you can see it in the website. If you have any issue please feel free to send mail to \n *vardhamanassistant@gmail.com*\n stating the issue.",parse_mode= 'Markdown')
 	try:
 		for i in range(9,37,4):
 			t=td[i+3].text.strip()
