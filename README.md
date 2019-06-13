@@ -18,5 +18,5 @@ https://core.telegram.org/bots/samples
 
 
 
-### If you want to write a simple bot, see the tutorial here
+### If you want to write a simple bot and deploy it in heroku using flask, see the tutorial here
   https://theflair.tk/pytelebot/simple-python-telegram-bot.html
