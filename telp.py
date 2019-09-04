@@ -87,7 +87,6 @@ def help(message):
 def login(message):
 	tid = str(message.from_user.id)
 	m=message.text
-	print(tid)
 	if tid in gid :
 		tindex=gid.index(tid)
 		rno=rid[tindex]
@@ -120,7 +119,6 @@ def passd(message):
 	finalurl=check_pas(rno,pas)
 	tid = str(chat_id)
 	print(finalurl)
-	tim.sleep(1)
 	if(finalurl == "http://studentscorner.vardhaman.org/Students_Corner_Frame.php"):
 		f='1'
 		print(f)
