@@ -26,11 +26,12 @@ PORT = int(os.environ.get('PORT', '8443'))
 #upd	ater = Updater(API_API_TOKEN)
 global br,gid,rid,pid,finalurl,ppr,pper#,checkrno
 finalurl = "http://studentscorner.vardhaman.org/"
-gid=[]
-rid=[]
-pid=[]
-ppr=[]
-pper=[]
+gid = []
+rid = []
+pid = []
+ppr = []
+pper = []
+ttt = []
 br = RoboBrowser(history=True, parser="html.parser")
 
 def send_typing_action(func):
@@ -82,6 +83,53 @@ def help(message):
 '''
 #rno=''
 # Handle all other messages with content_type 'text' (content_types defaults to ['text'])
+@bot.message_handler(commands=['login'])
+def login(message):
+	tid = str(message.from_user.id)
+	m=message.text
+	print(tid)
+	if tid in gid :
+		tindex=gid.index(tid)
+		rno=rid[tindex]
+		pas=pid[tindex]
+		gid.remove(tid)
+		rid.remove(rno)
+		pid.remove(pas)
+		bot.send_message(tid,"Try again, logged out old user.")
+	else:
+		msg=bot.send_message(tid,"Enter your Roll no")
+		bot.register_next_step_handler(msg, roll_no)
+		
+def roll_no(message):
+	chat_id = message.chat.id
+	rno = message.text
+	rno = rno.upper()
+	ttt.append(rno)
+	try:
+		msg=bot.send_message(chat_id,"Enter your password")
+		bot.register_next_step_handler(msg, passd)
+	except Exception as e:
+		Bot.send_message(chat_id,'oooops\nSomething went wrong.\nsend a mail to vardhamanassistant@gmail.com stating the issue.\n')
+def passd(message):
+	chat_id = message.chat.id
+	pas=''
+	pas = message.text
+	ttt.append(pas)
+	rno = ttt[0]
+	finalurl = "http://studentscorner.vardhaman.org/"
+	finalurl=check_pas(rno,pas)
+	tid = str(chat_id)
+	print(finalurl)
+	tim.sleep(1)
+	if(finalurl == "http://studentscorner.vardhaman.org/Students_Corner_Frame.php"):
+		f='1'
+		print(f)
+		sin_id(tid,rno,pas)
+		bot.reply_to(message,'Correct credentials, what do you want?')
+	else:
+		bot.reply_to(message,'Incorrect credentials!, try again')
+	del ttt[:]
+
 @send_typing_action
 @bot.message_handler(func=lambda message:True if(len(message.text)==16 or len(message.text)>25) else False)
 def echo_message(message):
