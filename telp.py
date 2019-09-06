@@ -51,23 +51,24 @@ def my_handler(bot, update):
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
+	#starts.acquire()
 	bot.reply_to(message, """\
 Hi there, I am Vbot here to give you, your things!
-Enter your RollNo and give one space and type password.
-Don't forget the space.
-"17881A0500 #ABCD"
+For logging in please type "/login"
 For help type '/help'\
 """)
 
 #For seeing the commands in my bot.
 @bot.message_handler(commands=['help'])
 def help(message):
+	#helps.acquire()
 	bot.reply_to(message,"""
+      '/login',
       '/details',
       '/attendance',
-      '/cgpa'
-      '/sgpa'
-      '/logout',
+      '/cgpa',
+      '/sgpa',
+      '/logout' 
      for now.""")
 # error handling if user isn't known yet
 # (obsolete once known users are saved to file, because all users
@@ -520,24 +521,29 @@ def Cgpa(message):
 	else:
 		bot.reply_to(message,"First Login")
 
-@bot.message_handler(func=lambda message:True if(len(message.text)==5 or len(message.text)==6) else False)
+@bot.message_handler(commands=['sgpa','SGPA','S.G.P.A','s.g.p.a'])
 def Sgpa(message):
-	tid = str(message.from_user.id)
-	mtext=message.text
-	#semid=bot.reply_to(message,"Enter the semester number")
-	if(len(message.text)==5):
-		semid=mtext[0]
-	if(len(message.text)==6):
-		semid=mtext[-1] # last character of string
+	chat_id = message.chat.id
+	tid = str(chat_id)
 	if tid in gid :
-		tindex=gid.index(tid)
-		rno=rid[tindex]
-		pas=pid[tindex]
-		data=gpa.sgpa(rno,pas,semid)
-		bot.reply_to(message,data)
-		print(rno,pas)
+		try:
+			msg=bot.send_message(chat_id,"Enter semester number")
+			bot.register_next_step_handler(msg, Sgpan)
+		except Exception as e:
+			Bot.send_message(chat_id,'oooops\nSomething went wrong.\nsend a mail to vardhamanassistant@gmail.com stating the issue.\n')
 	else:
 		bot.reply_to(message,"First Login")
+def Sgpan(message):
+	tid = str(message.chat.id)
+	mtext=str(message.text)
+#	semid=str(semid)
+	print(gid,rid, pid)
+	tindex=gid.index(tid)
+	rno=rid[tindex]
+	pas=pid[tindex]
+	data=gpa.sgpa(rno,pas,mtext)
+	bot.reply_to(message,data)
+	print(rno,pas)
 	
 @server.route('/' + API_TOKEN, methods=['POST'])
 def getMessage():
