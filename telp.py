@@ -15,6 +15,7 @@ import threading
 import os
 import marks as gpa
 import applyper as papply
+import attendance as atd
 #from selenium import webdriver
 #from webdriver_manager.chrome import ChromeDriverManager
 #from selenium.webdriver.common.keys import Keys
@@ -26,12 +27,17 @@ PORT = int(os.environ.get('PORT', '8443'))
 #upd	ater = Updater(API_API_TOKEN)
 global br,gid,rid,pid,finalurl,ppr,pper#,checkrno
 finalurl = "http://studentscorner.vardhaman.org/"
-gid = []
-rid = []
-pid = []
-ppr = []
-pper = []
-ttt = []
+gid=[]  # Global storage 
+rid=[]  # Roll no storage
+pid=[]  # Password storage
+pper=[] # Temporary storage of outing
+ppr=[]  # Temporary storage of outing
+ttt=[]  # Temp storage of rno and pass for logging
+rege=["attendance", "details", "name", "cgpa", "c.g.p.a", "CGPA", "C.G.P.A", "sgpa", "SGPA", "s.g.p.a", "S.G.P.A", "outing", "logout"]
+rege_attendance = ["attendance"]
+rege_details = ["details"]
+rege_cgpa = ["cgpa"]
+rege_outing = ["outing"]
 br = RoboBrowser(history=True, parser="html.parser")
 
 def send_typing_action(func):
@@ -194,14 +200,18 @@ def dic_gid(tid):
 	if(tid in gid):
 		print("dic_gid success")
 @bot.message_handler(commands=['attendance','atd'])
-def attendance(message):
+def attendance(message):	
 	tid = str(message.from_user.id)
+	#bot.send_chat_action(chat_id=tid, action=telegram.ChatAction.TYPING)
 	if(tid in gid):
-		get_atd(tid)
-		#bot.reply_to(message,atd)
+		tindex=gid.index(tid)
+		rno=rid[tindex]
+		pas=pid[tindex]
+		t = atd.attendance(tid,rno,pas)
 		
 	else:
 		bot.reply_to(message,"First login to get details")
+	#atds.release()
 '''@bot.message_handler(commands=['outing'])
 def outing(message):
 	global finalurl
@@ -283,7 +293,7 @@ def check_pas(rno,pas):
 		return(finalurl)
 	else:
 		return False
-def get_atd(tid):
+'''def get_atd(tid):
 
 	tindex=gid.index(tid)
 	rno=rid[tindex]
@@ -323,7 +333,8 @@ def get_atd(tid):
 				bot.send_message(tid,str(td[i].text.strip())+"   "+p+"   "+d+"  -  ~<i>"+t+"</i>~",parse_mode= 'Html')#attend)
 		#break
 	except IndexError:
-		pass		
+		pass
+'''
 def get_det(tid):
 	tindex=gid.index(tid)
 	rno=rid[tindex]
@@ -544,7 +555,30 @@ def Sgpan(message):
 	data=gpa.sgpa(rno,pas,mtext)
 	bot.reply_to(message,data)
 	print(rno,pas)
-	
+@bot.message_handler(func=lambda message:True)
+def regular_expression(message):
+	print("Entered into rege_expression")
+	m = message.text
+	tid = str(message.from_user.id)
+	if tid in gid :
+		tindex=gid.index(tid)
+		rno=rid[tindex]
+		pas=pid[tindex]
+		tokens = word_tokenize(m)
+		same_token = list(set(tokens) & set(rege))
+		print(type(same_token))
+		print(same_token, same_token[0])
+		if(same_token[0] in rege_attendance):
+			l=atd.attendance(tid,rno,pas)
+		if(same_token[0] in rege_details):
+			details(message)
+		if(same_token[0] in rege_cgpa):
+			Cgpa(message)
+		if(same_token[0] in rege_outing):
+			outing(message)
+#if(same_token in rege_attendance):
+	else:
+		bot.reply_to(message,'First login to access me!')	
 @server.route('/' + API_TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
