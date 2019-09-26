@@ -21,7 +21,7 @@ def attendance(tid,rno,pas):
 	att = []
 	#print str(th[55].text.strip())+":"+str(th[56].text.strip())#attend
 	try:
-		for i in range(46,56):
+		for i in range(40,60):
 			if(str(th[i].text.strip())=="Attendance Percentage"):
 				#if(finalurl != "http://studentscorner.vardhaman.org/"):
 				#att.append("\033[1m"+str(th[i].text.strip())+" : *"+str(th[i+1].text.strip())+"*")	
