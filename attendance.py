@@ -2,7 +2,7 @@ from robobrowser import RoboBrowser
 from bs4 import BeautifulSoup
 import telebot
 import telegram_send
-API_TOKEN = '703046139:AAH8uLwxJYHtCVMTdiGHm6ZCxItoQibPZDg'
+API_TOKEN = '510512298:AAGQ41ooEVrk_hgh959nhKLg_JbneDE3I2o'
 
 bot = telebot.TeleBot(API_TOKEN)
 def attendance(tid,rno,pas):
