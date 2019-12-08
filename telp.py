@@ -13,7 +13,7 @@ from telebot import types
 import requests  
 import threading
 import os
-from nltk.tokenize import word_tokenize
+#from nltk.tokenize import word_tokenize
 from io import StringIO
 import marks as gpa
 import applyper as papply
