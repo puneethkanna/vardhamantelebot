@@ -487,6 +487,15 @@ def applying(message):
 		#bt=br.parsed()
 		checkper=str(br.select)
 		print(checkper)'''
+		tt = papply.form(ppr[0], ppr[1])
+		f = StringIO()
+		# write some content to 'f'
+		f.write("tt 'test.html'")
+		f.seek(0)
+		file_data = open('test.html', 'rb')
+		tb = telebot.TeleBot(API_TOKEN)
+		ret_msg = tb.send_document(chat_id, file_data)
+		assert ret_msg.message_id
 		del ppr[:]
 		del pper[:]
 		bot.reply_to(message,tt)
