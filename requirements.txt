@@ -35,7 +35,7 @@ PyHamcrest==1.9.0
 pyTelegramBotAPI==3.6.6
 python-telegram-bot==11.1.0
 qt5reactor==0.5
-requests==2.7.0
+requests==2.20.0
 requirements==0.1
 robobrowser==0.5.3
 schedule==0.6.0
