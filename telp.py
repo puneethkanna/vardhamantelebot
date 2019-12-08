@@ -493,15 +493,14 @@ def applying(message):
 		tt = papply.form(ppr[0], ppr[1])
 		f = StringIO()
 		# write some content to 'f'
-		f.write("tt 'permissionform.html'")
+		f.write("tt 'test.html'")
 		f.seek(0)
-		file_data = open('permissionform.html', 'rb')
+		file_data = open('test.html', 'rb')
 		tb = telebot.TeleBot(API_TOKEN)
 		ret_msg = tb.send_document(chat_id, file_data)
 		assert ret_msg.message_id
 		del ppr[:]
 		del pper[:]
-		bot.reply_to(message,tt)
 	elif(ask == u'No'):
 		bot.reply_to(message,"You have cancelled to submit the form.")	
 def get_outing(rno,pas,tid):
