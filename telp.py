@@ -13,6 +13,8 @@ from telebot import types
 import requests  
 import threading
 import os
+from nltk.tokenize import word_tokenize
+from io import StringIO
 import marks as gpa
 import applyper as papply
 import attendance as atd
@@ -466,6 +468,7 @@ def applying(message):
 		#rno=rid[tindex]
 		#pas=pid[tindex]
 		tt=papply.applyf(ppr[0],ppr[1],pper[0],pper[1],pper[2])
+		bot.reply_to(message,tt)
 		'''br = RoboBrowser(history=True, parser="html.parser")
 		br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
 		br.open('http://studentscorner.vardhaman.org')
@@ -490,9 +493,9 @@ def applying(message):
 		tt = papply.form(ppr[0], ppr[1])
 		f = StringIO()
 		# write some content to 'f'
-		f.write("tt 'test.html'")
+		f.write("tt 'permissionform.html'")
 		f.seek(0)
-		file_data = open('test.html', 'rb')
+		file_data = open('permissionform.html', 'rb')
 		tb = telebot.TeleBot(API_TOKEN)
 		ret_msg = tb.send_document(chat_id, file_data)
 		assert ret_msg.message_id
