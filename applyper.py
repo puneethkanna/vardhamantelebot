@@ -57,3 +57,14 @@ def applyf(rno,pas,out,indat,rea):
 
 	print(checkper)
 	return("applied")
+def form(rno, pas):
+	br = RoboBrowser(parser="html.parser")
+	br = RoboBrowser(user_agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6')
+	br.open('http://studentscorner.vardhaman.org')
+	form = br.get_form(action="")
+	form["rollno"] =rno#ppr[0]# user.rno
+	form["wak"] = pas#ppr[1]#user.pas
+	br.submit_form(form)
+	br.open("http://studentscorner.vardhaman.org/students_permission_form.php")
+	tt=str(br.select)
+	return(tt)
