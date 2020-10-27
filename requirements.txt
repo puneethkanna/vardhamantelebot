@@ -14,7 +14,7 @@ config==0.4.0
 configparser==3.7.1
 constantly==15.1.0
 crayons==0.1.2
-cryptography==2.5
+cryptography==3.2
 Flask==1.0.2
 funcparserlib==0.3.6
 future==0.17.1
