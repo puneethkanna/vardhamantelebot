@@ -4,7 +4,7 @@ asn1crypto==0.24.0
 attrs==18.2.0
 Automat==0.7.0
 beautifulsoup4==4.7.1
-bottle==0.12.16
+bottle==0.12.20
 certifi==2018.11.29
 cffi==1.11.5
 chardet==3.0.4
